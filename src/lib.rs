@@ -1,6 +1,6 @@
-// TODO: #![warn(missing_docs)]
+#![warn(missing_docs)]
 
-//! TODO: Crate documentation: https://github.com/rust-lang/rust/blob/master/src/doc/book/documentation.md
+//! This crate provides basic functionality and interfaces to work with images.
 
 mod scalar;
 mod px;

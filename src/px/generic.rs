@@ -65,6 +65,20 @@ pub trait Pixel: Copy + Clone + Debug + PartialEq<Self> {
 // TODO: it might be possible to provide a simplified trait which just needs a lambda implementation
 //       for pixel <op> pixel, pixel <op> scalar and scalar <op> pixel
 pub trait PixelArithmetic: Pixel {
+    /// This is the concrete [`Scalar`](trait.Scalar.html) implementation which can be used in
+    /// arithmetic operations, with this [`Pixel`](trait.Pixel.html) type.
+    ///
+    /// # Examples
+    /// In the example below the type of `a` is `PixelVal<Gray<u8>>` and the type of `b` is
+    /// `ScalarVal<u8>`. Because `Gray<u8>::ScalarT` is `u8` it is possible to use arithmetic
+    /// operations with those types.
+    ///
+    /// ```
+    /// use img::{ScalarVal, PixelVal, GrayVal8U};
+    /// let a = GrayVal8U::new(ScalarVal(21));
+    /// let b = ScalarVal(2u8);
+    /// let _ = a * b;
+    /// ```
     type ScalarT: Scalar;
 
     // pixel <op> pixel

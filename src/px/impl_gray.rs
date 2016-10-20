@@ -1,7 +1,12 @@
 use std::mem::{size_of, transmute, transmute_copy};
 use {Scalar, ScalarVal, Pixel, PixelArithmetic, PixelVal};
 
-/// TODO: Struct documentation
+/// Defines a simple grayscale pixel type.
+///
+/// The `BaseTypeP` type parameter specifies the data type used to store
+/// the intensity value. Therefore this struct can be used to work with
+/// 8bit, 16bit, ... integer values and also with 32bit, 64bit floating
+/// point values.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Gray<BaseTypeP>
     where BaseTypeP: Scalar
@@ -9,7 +14,6 @@ pub struct Gray<BaseTypeP>
     intensity: BaseTypeP,
 }
 
-/// TODO: Impl documentation
 impl<BaseTypeP> Pixel for Gray<BaseTypeP>
     where BaseTypeP: Scalar
 {
@@ -42,7 +46,6 @@ impl<BaseTypeP> Pixel for Gray<BaseTypeP>
     }
 }
 
-/// TODO: Impl documentation
 impl<BaseTypeP> PixelArithmetic for Gray<BaseTypeP>
     where BaseTypeP: Scalar
 {
@@ -88,30 +91,46 @@ impl<BaseTypeP> PixelArithmetic for Gray<BaseTypeP>
     }
 }
 
-// implement gray specific stuff
+/// Convenient abbreviation for [`Gray`](trait.Gray.html) [`PixelVal`s](struct.PixelVal.html)
 pub type GrayVal<BaseTypeP> = PixelVal<Gray<BaseTypeP>>;
 
 impl<BaseTypeP> GrayVal<BaseTypeP>
     where BaseTypeP: Scalar
 {
+    /// Constructs a `GrayVal` based on a given intensity value.
     pub fn new(intensity: ScalarVal<BaseTypeP>) -> GrayVal<BaseTypeP> {
         PixelVal(Gray { intensity: intensity.0 })
     }
 
+    /// Getter for the intensity value
     pub fn intensity(&self) -> ScalarVal<BaseTypeP> {
         ScalarVal(self.0.intensity)
     }
+
+    /// Setter for the intensity value
+    pub fn set_intensity(&mut self, intensity: ScalarVal<BaseTypeP>) {
+        self.0.intensity = intensity.0;
+    }
 }
 
-// abbreviations
+/// Convenient abbreviation
 pub type Gray8U = Gray<u8>;
+/// Convenient abbreviation
 pub type Gray16U = Gray<u16>;
+/// Convenient abbreviation
 pub type Gray32U = Gray<u32>;
+/// Convenient abbreviation
 pub type Gray32F = Gray<f32>;
+/// Convenient abbreviation
 pub type Gray64F = Gray<f64>;
 
+/// Convenient abbreviation
 pub type GrayVal8U = GrayVal<u8>;
+/// Convenient abbreviation
 pub type GrayVal16U = GrayVal<u16>;
+/// Convenient abbreviation
 pub type GrayVal32U = GrayVal<u32>;
+/// Convenient abbreviation
 pub type GrayVal32F = GrayVal<f32>;
+/// Convenient abbreviation
 pub type GrayVal64F = GrayVal<f64>;

@@ -31,15 +31,19 @@ pub struct PixelVal<T>(pub T) where T: Pixel;
 impl<PixelP> PixelVal<PixelP>
     where PixelP: Pixel
 {
+    #[allow(missing_docs)]
     pub fn calc_minimum_pitch(width: u32, height: u32) -> usize {
         PixelP::calc_minimum_pitch(width, height)
     }
+    #[allow(missing_docs)]
     pub fn calc_size_in_bytes(width: u32, height: u32, pitch: u32) -> Option<usize> {
         PixelP::calc_size_in_bytes(width, height, pitch)
     }
+    #[allow(missing_docs)]
     pub fn load_from_raw_buffer(x: u32, y: u32, pitch: u32, buffer: &[u8]) -> Self {
         PixelVal(PixelP::load_from_raw_buffer(x, y, pitch, buffer))
     }
+    #[allow(missing_docs)]
     pub fn write_into_raw_buffer(&self, x: u32, y: u32, pitch: u32, buffer: &mut [u8]) {
         self.0.write_into_raw_buffer(x, y, pitch, buffer)
     }

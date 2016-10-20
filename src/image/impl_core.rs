@@ -6,7 +6,8 @@ use ScalarVal;
 use {PixelArithmetic, PixelVal};
 use {Image, ImageBufferVal};
 
-// TODO: The example below is currently set to 'ignore' because there is an ICE otherwise.
+// TODO: The example below is currently set to 'ignore' because there is an
+//       ICE (https://github.com/rust-lang/rust/issues/37291) otherwise.
 
 /// Newtype which wraps [`Image`](trait.Image.html)
 ///
@@ -49,32 +50,39 @@ use {Image, ImageBufferVal};
 #[derive(Clone)]
 pub struct ImageVal<ImageP>(pub ImageP) where ImageP: Image;
 
-/// TODO: Impl documentation
+/// Derive all functions from [`Image`](trait.Image.html) for `ImageVal`.
 impl<ImageP> ImageVal<ImageP>
     where ImageP: Image
 {
+    #[allow(missing_docs)]
     pub fn get_size_in_bytes(&self) -> usize {
         self.0.get_size_in_bytes()
     }
+    #[allow(missing_docs)]
     pub fn load_from_raw_buffer(&mut self, buffer: &[u8]) {
         self.0.load_from_raw_buffer(buffer)
     }
+    #[allow(missing_docs)]
     pub fn write_into_raw_buffer(&self, buffer: &mut [u8]) {
         self.0.write_into_raw_buffer(buffer)
     }
+    #[allow(missing_docs)]
     pub fn width(&self) -> u32 {
         self.0.width()
     }
+    #[allow(missing_docs)]
     pub fn height(&self) -> u32 {
         self.0.height()
     }
+    #[allow(missing_docs)]
     pub fn pitch(&self) -> u32 {
         self.0.pitch()
     }
+    #[allow(missing_docs)]
     pub fn get_pixel(&self, x: u32, y: u32) -> Option<PixelVal<ImageP::PixelT>> {
         self.0.get_pixel(x, y).map(|v| PixelVal(v))
     }
-
+    #[allow(missing_docs)]
     pub fn set_pixel(&mut self, x: u32, y: u32, value: PixelVal<ImageP::PixelT>) {
         self.0.set_pixel(x, y, value.0)
     }
@@ -85,7 +93,11 @@ impl<ImageP> ImageVal<ImageP>
 // img <op> img
 macro_rules! derive_std_op_for_img_img {
     ($op_type:ident, $op_std_func:ident) => (
-/// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, PixelX, ImageA, ImageB> $op_type<&'a ImageVal<ImageB>> for &'a ImageVal<ImageA>
             where PixelX: PixelArithmetic,
                   ImageA: Image<PixelT = PixelX>,
@@ -116,7 +128,11 @@ derive_std_op_for_img_img!(Div, div);
 // img <op> px | px <op> img | img <op> sc | sc <op> img
 macro_rules! derive_std_op_for_img_val_and_val_img {
     ($op_type:ident, $op_std_func:ident) => (
-/// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, ImageT> $op_type<PixelVal<ImageT::PixelT>> for &'a ImageVal<ImageT>
             where ImageT: Image,
                   ImageT::PixelT: PixelArithmetic
@@ -133,7 +149,11 @@ macro_rules! derive_std_op_for_img_val_and_val_img {
                 result
             }
         }
-/// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, ImageT> $op_type<&'a ImageVal<ImageT>> for PixelVal<ImageT::PixelT>
             where ImageT: Image,
                   ImageT::PixelT: PixelArithmetic
@@ -150,7 +170,11 @@ macro_rules! derive_std_op_for_img_val_and_val_img {
                 result
             }
         }
-        /// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, ImageT> $op_type<ScalarVal<<ImageT::PixelT as PixelArithmetic>::ScalarT>> for &'a ImageVal<ImageT>
             where ImageT: Image,
                   ImageT::PixelT: PixelArithmetic
@@ -167,7 +191,11 @@ macro_rules! derive_std_op_for_img_val_and_val_img {
                 result
             }
         }
-        /// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, ImageT> $op_type<&'a ImageVal<ImageT>> for ScalarVal<<ImageT::PixelT as PixelArithmetic>::ScalarT>
             where ImageT: Image,
                   ImageT::PixelT: PixelArithmetic
@@ -194,7 +222,11 @@ derive_std_op_for_img_val_and_val_img!(Div, div);
 // img <assign_op> img | img <assign_op> px | img <assign_op> sc
 macro_rules! derive_std_assign_op_for_img_img_and_img_val {
     ($op_type:ident, $op_std_assign_func:ident) => (
-/// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<'a, PixelX, ImageA, ImageB> $op_type<&'a ImageVal<ImageB>> for ImageVal<ImageA>
             where PixelX: PixelArithmetic,
                   ImageA: Image<PixelT = PixelX>,
@@ -214,7 +246,11 @@ macro_rules! derive_std_assign_op_for_img_img_and_img_val {
                 }
             }
         }
-        /// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<ImageA> $op_type<PixelVal<ImageA::PixelT>> for ImageVal<ImageA>
             where ImageA: Image,
                   ImageA::PixelT: PixelArithmetic
@@ -229,7 +265,11 @@ macro_rules! derive_std_assign_op_for_img_img_and_img_val {
                 }
             }
         }
-        /// TODO: Impl documentation
+/// Derive std operator for this newtype.
+///
+/// If the corresponding [`Pixel`](trait.Pixel.html) implement this std operator, it is used
+/// to implement the derived variant. The derived variant executes the original operator for
+/// every pixel.
         impl<ImageA> $op_type<ScalarVal<<ImageA::PixelT as PixelArithmetic>::ScalarT>> for ImageVal<ImageA>
             where ImageA: Image,
                   ImageA::PixelT: PixelArithmetic
